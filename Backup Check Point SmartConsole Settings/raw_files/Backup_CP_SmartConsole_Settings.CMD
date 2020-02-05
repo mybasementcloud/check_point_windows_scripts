@@ -1,14 +1,14 @@
 @ECHO OFF
 REM
 REM Script     :  Backup Check Point SmartConsole Settings Configuration for host to central repository for backup
-REM Version    :  02.00.00
-REM Date       :  2020-01-01
+REM Version    :  02.01.00
+REM Date       :  2020-01-14
 REM
 
 SET _LOCALSCRIPTNAME=Backup_CP_SC_Settings
-SET _LOCALSCRIPTDATE=2020-01-01
-SET _LOCALSCRIPTTIME=1720CST
-SET _LOCALSCRIPTVERSION=02.00.00
+SET _LOCALSCRIPTDATE=2020-01-14
+SET _LOCALSCRIPTTIME=0930CST
+SET _LOCALSCRIPTVERSION=02.01.00
 SET _LOCALSCRIPTREVISION=000
 
 
@@ -56,7 +56,9 @@ SET "DATETIMEGRP="
 SET "_HOST_NAME="
 SET "_JUSTDOIT="
 
-SET "SOURCEFOLDER="
+SET "SOURCEFOLDERROOT="
+SET "SOURCEFOLDER_MGMT_CLI="
+SET "SOURCEFOLDER_SMARTCONSOLE="
 SET "SOURCEREGKEY="
 
 SET "INSTALLEDPROGRAMFILES="
@@ -64,8 +66,9 @@ SET "INSTALLEDFOLDER="
 SET "INSTALLEDPATHROOT="
 SET "INSTALLEDPATH="
 
-SET "TARGETROOT="
-SET "TARGETFOLDER="
+SET "TARGETFOLDERROOT="
+SET "TARGETFOLDER_MGMT_CLI="
+SET "TARGETFOLDER_SMARTCONSOLE="
 SET "TARGETFOLDERREG="
 SET "TARGETREGDUMPNAMEPREFIX="
 SET "TARGETREGDUMPFQFP="
@@ -636,7 +639,9 @@ REM ============================================================================
 REM CONFIGURE LOCAL VARIABLES
 REM =====================================================================================
 
-SET "SOURCEFOLDER=%LOCALAPPDATA%\Check Point\SmartConsole"
+SET "SOURCEFOLDERROOT=%LOCALAPPDATA%\Check Point"
+SET "SOURCEFOLDER_MGMT_CLI=%SOURCEFOLDERROOT%\mgmt_cli"
+SET "SOURCEFOLDER_SMARTCONSOLE=%SOURCEFOLDERROOT%\SmartConsole"
 SET "SOURCEREGKEY=HKEY_CURRENT_USER\Software\CheckPoint\Management Clients"
 
 if /i "%PROCESSOR_ARCHITECTURE%"=="x86" SET "INSTALLEDPROGRAMFILES=%ProgramFiles%"
@@ -649,9 +654,10 @@ SET "INSTALLEDFOLDER=SmartConsole"
 SET "INSTALLEDPATHROOT=%INSTALLEDPROGRAMFILES%\%INSTALLEDFOLDER%"
 SET "INSTALLEDPATH=%INSTALLEDPATHROOT%\"
 
-SET "TARGETROOT=%USERPROFILE%\Check Point\Settings Backup"
-SET "TARGETFOLDER=%TARGETROOT%\SmartConsole"
-SET "TARGETFOLDERREG=%TARGETFOLDER%\registry"
+SET "TARGETFOLDERROOT=%USERPROFILE%\Check Point\Settings Backup"
+SET "TARGETFOLDER_MGMT_CLI=%TARGETFOLDERROOT%\mgmt_cli"
+SET "TARGETFOLDER_SMARTCONSOLE=%TARGETFOLDERROOT%\SmartConsole"
+SET "TARGETFOLDERREG=%TARGETFOLDER_SMARTCONSOLE%\registry"
 
 REM SET "TARGETREGDUMPNAMEPREFIX=HKCU_SW_CP_Management-Clients"
 SET "TARGETREGDUMPNAMEPREFIX=reg_cp_mgmt_clients"
@@ -674,7 +680,9 @@ REM @ECHO _tempLOGFILE                ="%_tempLOGFILE%" >> "%_scriptLOGFQPN%"
 @ECHO _JUSTDOIT                   ="%_JUSTDOIT%" >> "%_scriptLOGFQPN%"
 
 @ECHO. >> "%_scriptLOGFQPN%"
-@ECHO SOURCEFOLDER                ="%SOURCEFOLDER%" >> "%_scriptLOGFQPN%"
+@ECHO SOURCEFOLDERROOT            ="%SOURCEFOLDERROOT%" >> "%_scriptLOGFQPN%"
+@ECHO SOURCEFOLDER_MGMT_CLI       ="%SOURCEFOLDER_MGMT_CLI%" >> "%_scriptLOGFQPN%"
+@ECHO SOURCEFOLDER_SMARTCONSOLE   ="%SOURCEFOLDER_SMARTCONSOLE%" >> "%_scriptLOGFQPN%"
 @ECHO SOURCEREGKEY                ="%SOURCEREGKEY%" >> "%_scriptLOGFQPN%"
 
 @ECHO INSTALLEDPROGRAMFILES       ="%INSTALLEDPROGRAMFILES%" >> "%_scriptLOGFQPN%"
@@ -682,11 +690,13 @@ REM @ECHO _tempLOGFILE                ="%_tempLOGFILE%" >> "%_scriptLOGFQPN%"
 @ECHO INSTALLEDPATHROOT           ="%INSTALLEDPATHROOT%" >> "%_scriptLOGFQPN%"
 @ECHO INSTALLEDPATH               ="%INSTALLEDPATH%" >> "%_scriptLOGFQPN%"
 
-@ECHO TARGETROOT                  ="%TARGETROOT%" >> "%_scriptLOGFQPN%"
-@ECHO TARGETFOLDER                ="%TARGETFOLDER%" >> "%_scriptLOGFQPN%"
+@ECHO TARGETFOLDERROOT            ="%TARGETFOLDERROOT%" >> "%_scriptLOGFQPN%"
+@ECHO TARGETFOLDER_MGMT_CLI       ="%TARGETFOLDER_MGMT_CLI%" >> "%_scriptLOGFQPN%"
+@ECHO TARGETFOLDER_SMARTCONSOLE   ="%TARGETFOLDER_SMARTCONSOLE%" >> "%_scriptLOGFQPN%"
 @ECHO TARGETFOLDERREG             ="%TARGETFOLDERREG%" >> "%_scriptLOGFQPN%"
 
 @ECHO TARGETREGDUMPNAMEPREFIX     ="%TARGETREGDUMPNAMEPREFIX%" >> "%_scriptLOGFQPN%"
+@ECHO. >> "%_scriptLOGFQPN%"
 
 REM =====================================================================================
 REM GET TO WHERE THE WORK IS DONE
@@ -697,9 +707,9 @@ REM CD /D "%_scriptTempWORKDIR%"
 
 REM PUSHD "%_scriptTempWORKDIR%" 
 
-@ECHO Copy Check Point SmartConsole settings to "%TARGETFOLDER%" folder
+@ECHO Copy Check Point SmartConsole settings to "%TARGETFOLDER_SMARTCONSOLE%" folder
 @ECHO.
-@ECHO Copy Check Point SmartConsole settings to "%TARGETFOLDER%" folder >> "%_scriptLOGFQPN%"
+@ECHO Copy Check Point SmartConsole settings to "%TARGETFOLDER_SMARTCONSOLE%" folder >> "%_scriptLOGFQPN%"
 @ECHO. >> "%_scriptLOGFQPN%"
 
 REM =====================================================================================
@@ -743,22 +753,22 @@ SET "_sublocalVERSION=%~1"
 @ECHO ------------------------------------------------------------------------------- >> "%_scriptLOGFQPN%"
 @ECHO. >> "%_scriptLOGFQPN%"
 
-IF NOT EXIST "%SOURCEFOLDER%\%_sublocalVERSION%" @ECHO No source folder for version %_sublocalVERSION% exists : "%SOURCEFOLDER%\%_sublocalVERSION%" >> "%_scriptLOGFQPN%"
-IF NOT EXIST "%SOURCEFOLDER%\%_sublocalVERSION%" GOTO :DONEBCKSRCFLDR
+IF NOT EXIST "%SOURCEFOLDER_SMARTCONSOLE%\%_sublocalVERSION%" @ECHO No source folder for version %_sublocalVERSION% exists : "%SOURCEFOLDER_SMARTCONSOLE%\%_sublocalVERSION%" >> "%_scriptLOGFQPN%"
+IF NOT EXIST "%SOURCEFOLDER_SMARTCONSOLE%\%_sublocalVERSION%" GOTO :DONEBCKSRCFLDR
 
-@ECHO Source folder for version %_sublocalVERSION% found : "%SOURCEFOLDER%\%_sublocalVERSION%" >> "%_scriptLOGFQPN%"
-
-@ECHO. >> "%_scriptLOGFQPN%"
-@ECHO Copy Source Folder "%SOURCEFOLDER%\%_sublocalVERSION%" to local "%SOURCEFOLDER%\%_sublocalVERSION%.BAK\" >> "%_scriptLOGFQPN%"
-@ECHO. >> "%_scriptLOGFQPN%"
-
-XCOPY "%SOURCEFOLDER%\%_sublocalVERSION%" "%SOURCEFOLDER%\%_sublocalVERSION%.BAK\" /S/V/E/Y >> "%_scriptLOGFQPN%"
+@ECHO Source folder for version %_sublocalVERSION% found : "%SOURCEFOLDER_SMARTCONSOLE%\%_sublocalVERSION%" >> "%_scriptLOGFQPN%"
 
 @ECHO. >> "%_scriptLOGFQPN%"
-@ECHO Copy Source Folder "%SOURCEFOLDER%\%_sublocalVERSION%" to target "%TARGETFOLDER%\%_sublocalVERSION%.BAK\" >> "%_scriptLOGFQPN%"
+@ECHO Copy Source Folder "%SOURCEFOLDER_SMARTCONSOLE%\%_sublocalVERSION%" to local "%SOURCEFOLDER_SMARTCONSOLE%\%_sublocalVERSION%.BAK\" >> "%_scriptLOGFQPN%"
 @ECHO. >> "%_scriptLOGFQPN%"
 
-XCOPY "%SOURCEFOLDER%\%_sublocalVERSION%" "%TARGETFOLDER%\%_sublocalVERSION%.BAK\" /S/V/E/Y >> "%_scriptLOGFQPN%"
+XCOPY "%SOURCEFOLDER_SMARTCONSOLE%\%_sublocalVERSION%" "%SOURCEFOLDER_SMARTCONSOLE%\%_sublocalVERSION%.BAK\" /S/V/E/Y >> "%_scriptLOGFQPN%"
+
+@ECHO. >> "%_scriptLOGFQPN%"
+@ECHO Copy Source Folder "%SOURCEFOLDER_SMARTCONSOLE%\%_sublocalVERSION%" to target "%TARGETFOLDER_SMARTCONSOLE%\%_sublocalVERSION%.BAK\" >> "%_scriptLOGFQPN%"
+@ECHO. >> "%_scriptLOGFQPN%"
+
+XCOPY "%SOURCEFOLDER_SMARTCONSOLE%\%_sublocalVERSION%" "%TARGETFOLDER_SMARTCONSOLE%\%_sublocalVERSION%.BAK\" /S/V/E/Y >> "%_scriptLOGFQPN%"
 
 :DONEBCKSRCFLDR
 @ECHO. >> "%_scriptLOGFQPN%"
@@ -806,9 +816,9 @@ SET "_sublocalVERSION=%~1"
 SET "_sublocalREGVersion=%~2"
 SET "_sublocalREGPREFIX=%~3"
 
-SET "_sublocalSourceFolder=%SOURCEFOLDER%\%_sublocalVERSION%"
+SET "_sublocalSourceFolder=%SOURCEFOLDER_SMARTCONSOLE%\%_sublocalVERSION%"
 SET "_sublocalSourceRegistry=%SOURCEREGKEY%\%_sublocalREGVersion%"
-SET "_sublocalTargetRegFile=%TARGETFOLDER%\registry\%_sublocalREGPREFIX%_%_sublocalVERSION%.reg"
+SET "_sublocalTargetRegFile=%TARGETFOLDER_SMARTCONSOLE%\registry\%_sublocalREGPREFIX%_%_sublocalVERSION%.reg"
 
 @ECHO. >> "%_scriptLOGFQPN%"
 @ECHO ------------------------------------------------------------------------------- >> "%_scriptLOGFQPN%"
@@ -861,8 +871,21 @@ REM ============================================================================
 
 :SKIPSUBS1
 
-IF NOT EXIST "%TARGETFOLDER%" MKDIR "%TARGETFOLDER%" >> "%_scriptLOGFQPN%"
+IF NOT EXIST "%TARGETFOLDER_SMARTCONSOLE%" MKDIR "%TARGETFOLDER_SMARTCONSOLE%" >> "%_scriptLOGFQPN%"
 IF NOT EXIST "%TARGETFOLDERREG%" MKDIR "%TARGETFOLDERREG%" >> "%_scriptLOGFQPN%"
+
+IF NOT EXIST "%SOURCEFOLDER_MGMT_CLI%" GOTO :NOMGMTCLIFOLDER
+@ECHO. >> "%_scriptLOGFQPN%"
+@ECHO Copy Check Point mgmt_cli.exe settings in "%LOCALAPPDATA%" to .BAK folder >> "%_scriptLOGFQPN%"
+@ECHO. >> "%_scriptLOGFQPN%"
+
+IF NOT EXIST "%TARGETFOLDER_MGMT_CLI%" MKDIR "%TARGETFOLDER_MGMT_CLI%" >> "%_scriptLOGFQPN%"
+
+XCOPY "%SOURCEFOLDER_MGMT_CLI%\*.*" "%TARGETFOLDER_MGMT_CLI%\" /S/V/E/Y >> "%_scriptLOGFQPN%"
+
+
+:NOMGMTCLIFOLDER
+
 
 @ECHO. >> "%_scriptLOGFQPN%"
 @ECHO Copy Check Point SmartConsole settings in "%LOCALAPPDATA%" to .BAK folder >> "%_scriptLOGFQPN%"
@@ -878,10 +901,10 @@ CALL :sub_BackupSourceFolder "R80.40"
 CALL :sub_BackupSourceFolder "R80.50"
 
 @ECHO. >> "%_scriptLOGFQPN%"
-@ECHO Export Check Point SmartConsole registry settings to "%TARGETFOLDER%\registry" folder >> "%_scriptLOGFQPN%"
+@ECHO Export Check Point SmartConsole registry settings to "%TARGETFOLDER_SMARTCONSOLE%\registry" folder >> "%_scriptLOGFQPN%"
 @ECHO. >> "%_scriptLOGFQPN%"
 
-REG EXPORT "%SOURCEREGKEY%" "%TARGETFOLDER%\registry\%TARGETREGDUMPNAMEPREFIX%_all.reg" /Y >> "%_scriptLOGFQPN%"
+REG EXPORT "%SOURCEREGKEY%" "%TARGETFOLDER_SMARTCONSOLE%\registry\%TARGETREGDUMPNAMEPREFIX%_all.reg" /Y >> "%_scriptLOGFQPN%"
 
 SET "INSTALLEDPATH=%INSTALLEDPATHROOT%\R77.30"
 @ECHO INSTALLEDPATH               ="%INSTALLEDPATH%" >> "%_scriptLOGFQPN%"
@@ -895,10 +918,10 @@ CALL :sub_BackupSourceRegistry "R80.40" "6.7.0" "%TARGETREGDUMPNAMEPREFIX%"
 CALL :sub_BackupSourceRegistry "R80.50" "6.8.0" "%TARGETREGDUMPNAMEPREFIX%"
 
 @ECHO. >> "%_scriptLOGFQPN%"
-DIR "%TARGETFOLDER%" >> "%_scriptLOGFQPN%"
+DIR "%TARGETFOLDER_SMARTCONSOLE%" >> "%_scriptLOGFQPN%"
 
 @ECHO. >> "%_scriptLOGFQPN%"
-DIR "%TARGETFOLDER%"\registry" >> "%_scriptLOGFQPN%"
+DIR "%TARGETFOLDER_SMARTCONSOLE%"\registry" >> "%_scriptLOGFQPN%"
 
 @ECHO. >> "%_scriptLOGFQPN%"
 
