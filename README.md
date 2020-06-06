@@ -2,9 +2,9 @@
 
 SmartConsole/SmartDashboard Configuration Backup Script:
 
-Backup user profile based SmartConsole settings for R80, R80.10, and R80.20, backup registry for R77.30, R80, R80.10, R80.20.
+Backup user profile based SmartConsole settings for R80, R80.10, and R80.20, R80.30, R80.40, and R80.50, backup registry for R77.30, R80, R80.10, R80.20, R80.30, R80.40, and R80.50.
 
-Use this before uninstalling SmartConsole to backup settings for user.  
+Use this before uninstalling SmartConsole to backup settings for user.
 
 To restore settings:
 1.)	Backup SmartConsole configuration settings (run script)
@@ -34,6 +34,8 @@ Supports versions:
 - R80    - Registry, User Profile data
 - R80.10 - Registry, User Profile data
 - R80.20 - Registry, User Profile data
+- R80.30 - Registry, User Profile data
+- R80.40 - Registry, User Profile data
 
-Updated 2018-05-01:  Added R80.20 support
+Updated 2020-03-31:  Added R80.30 - R80.50 support
 
