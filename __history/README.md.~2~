@@ -37,7 +37,7 @@ Supports versions:
 - R80.20 - Registry, User Profile data (Check Point\SmartConsole)
 - R80.30 - Registry, User Profile data (Check Point\SmartConsole)
 - R80.40 - Registry, User Profile data (Check Point\SmartConsole)
-- R81    - Registry, User Profile data (Check Point, and Check Point\SmartConsole)
+- R71    - Registry, User Profile data (Check Point, and Check Point\SmartConsole)
 
 Updated 
 - 2020-10-22:  Added Support for R81 and adjusted to the change in also collecting files in "%USERPROFILE%\appdata\local\Check Point\R81\".  Updated to latest _COMMON script versions used  
