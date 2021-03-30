@@ -1,12 +1,12 @@
 # check_point_windows_scripts
 
-SmartConsole/SmartDashboard Configuration Backup Script:
+# SmartConsole/SmartDashboard Configuration Backup Script:
 
 Backup user profile based SmartConsole settings for R80, R80.10, and R80.20, R80.30, R80.40, and R80.50, backup registry for R77.30, R80, R80.10, R80.20, R80.30, R80.40, and R81.
 
 Use this before uninstalling SmartConsole to backup settings for user.
 
-To restore settings:
+## To restore settings:
 1.)	Backup SmartConsole configuration settings (run script)
 
   You might want to zip the directories under "%USERPROFILE%\appdata\local\Check Point\SmartConsole\" where R80 and later keep their user specific SmartConsole settings on disk, versus just the registry keys used in pre-R80.x versions like R77.30.
@@ -30,7 +30,7 @@ To restore settings:
 
 8.)	Start SmartConsole again, all settings should be good
 
-Supports versions:
+## Supports versions:
 - R77.30 - Registry
 - R80    - Registry, User Profile data (Check Point\SmartConsole)
 - R80.10 - Registry, User Profile data (Check Point\SmartConsole)
@@ -39,12 +39,12 @@ Supports versions:
 - R80.40 - Registry, User Profile data (Check Point\SmartConsole)
 - R81    - Registry, User Profile data (Check Point, and Check Point\SmartConsole)
 
-Updated 
+### Updated 
 - 2020-10-25:  Updated _Common scripts to version v 03.00.00.000
 - 2020-10-22:  Added Support for R81 and adjusted to the change in also collecting files in "%USERPROFILE%\appdata\local\Check Point\R81\".  Updated to latest _COMMON script versions used
 - 2020-03-31:  Added R80.30 - R80.50 support
 
-Check Point SmartConsole Missing Shortcuts script
+# Check Point SmartConsole Missing Shortcuts script
 
 This script creates the shortcuts for SmartConsole Applications that are not created by default.
 
@@ -65,7 +65,8 @@ The following Shortcuts are created:
 - SmartUpdate <SmartConsole Version>
 - SmartViewMonitor <SmartConsole Version>
 
-Updated 
+### Updated 
+- 2021-03-29:  Updated Check Point SmartConsole Missing Shortcuts to 3.1.0 with fixes
 - 2020-10-25:  Updated _Common scripts to version v 03.00.00.000
 - 2020-10-25:  Corrected some display issues related to information sent to console versus log file
 - 2020-10-24:  Script added to the GitHub repository at initial release version

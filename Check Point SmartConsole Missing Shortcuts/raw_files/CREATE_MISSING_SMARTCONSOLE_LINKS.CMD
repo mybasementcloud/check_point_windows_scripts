@@ -15,9 +15,9 @@ REM #
 REM #
 
 SET _LOCALSCRIPTNAME=CREATE_MISSING_SMARTCONSOLE_LINKS
-SET _LOCALSCRIPTDATE=2020-10-25
-SET _LOCALSCRIPTTIME=1100CDT
-SET _LOCALSCRIPTVERSION=03.00.00
+SET _LOCALSCRIPTDATE=2021-03-29
+SET _LOCALSCRIPTTIME=2155CDT
+SET _LOCALSCRIPTVERSION=03.01.00
 SET _LOCALSCRIPTREVISION=000
 
 
@@ -751,7 +751,7 @@ REM WorkingDirectory Property   string WorkingDirectory () {get} {set}
 
 REM %PWS% -Command "$ws = New-Object -ComObject WScript.Shell; $s = $ws.CreateShortcut(%SHORTCUT%); $S.TargetPath = %TARGET%; $S.Save()"
 
-%PWS% -Command "$ws = New-Object -ComObject WScript.Shell; $s = $ws.CreateShortcut('%_LINKTARGET%'); $S.TargetPath = '%_LINKSOURCE%'; $S.WorkingDirectory = '%_LINKSOURCE%'; $S.Save()" >> "%_scriptLOGFQPN%" 2>>&1
+%PWS% -Command "$ws = New-Object -ComObject WScript.Shell; $s = $ws.CreateShortcut('%_LINKTARGET%'); $S.TargetPath = '%_LINKSOURCE%'; $S.WorkingDirectory = '%_LINKWORKDIR%'; $S.Save()" >> "%_scriptLOGFQPN%" 2>>&1
 
 @ECHO: >> "%_scriptLOGFQPN%" 2>>&1
 @ECHO:------------------------------------------------------------------------------------- >> "%_scriptLOGFQPN%" 2>>&1
